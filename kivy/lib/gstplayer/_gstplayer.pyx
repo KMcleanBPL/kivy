@@ -248,6 +248,7 @@ cdef class GstPlayer:
             g_object_set_int(self.appsink, 'sync', 1)
             g_object_set_int(self.appsink, 'qos', 1)
             g_object_set_int(self.appsink, 'max-buffers', 2)
+            print('_gstplayer.pyx', 'load():')
 
             g_object_set_void(self.playbin, 'video-sink', self.appsink)
 
