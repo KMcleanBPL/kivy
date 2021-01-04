@@ -243,11 +243,11 @@ cdef class GstPlayer:
                 raise GstPlayerException('Unable to create an appsink')
 
             g_object_set_caps(self.appsink, 'video/x-raw,format=RGB')
-            g_object_set_int(self.appsink, 'max-buffers', 5)
+#            g_object_set_int(self.appsink, 'max-buffers', 5)
             g_object_set_int(self.appsink, 'drop', 1)
             g_object_set_int(self.appsink, 'sync', 1)
             g_object_set_int(self.appsink, 'qos', 1)
-            g_object_set_int(self.appsink, 'max-buffers', 1)
+            g_object_set_int(self.appsink, 'max-buffers', 2)
 
             g_object_set_void(self.playbin, 'video-sink', self.appsink)
 
