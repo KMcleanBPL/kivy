@@ -248,7 +248,6 @@ cdef class GstPlayer:
             g_object_set_int(self.appsink, 'sync', 1)
             g_object_set_int(self.appsink, 'qos', 1)
             g_object_set_int(self.appsink, 'max-buffers', 2)
-            print('_gstplayer.pyx', 'load():')
 
             g_object_set_void(self.playbin, 'video-sink', self.appsink)
 
@@ -263,7 +262,7 @@ cdef class GstPlayer:
         g_object_set_int(self.pipeline, 'async-handling', 1)
         py_uri = <bytes>self.uri.encode('utf-8')
         g_object_set_void(self.playbin, 'uri', <char *>py_uri)
-        g_object_set_int(self.pipeline, 'latency', 100)
+        g_object_set_int(self.pipeline, 'latency', 1)
 
         # attach the callback
         # NOTE no need to create a weakref here, as we manage to grab/release
