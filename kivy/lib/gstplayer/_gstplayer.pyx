@@ -180,6 +180,7 @@ cdef class GstPlayer:
     cdef GstElement *fakesink
     cdef GstBus *bus
     cdef object uri, sample_cb, eos_cb, message_cb
+    cdef object appsink_source, appsink_dict
     cdef gulong hid_sample, hid_message
     cdef object __weakref__
 
@@ -188,12 +189,19 @@ cdef class GstPlayer:
         self.bus = NULL
         self.hid_sample = self.hid_message = 0
 
-    def __init__(self, uri, sample_cb=None, eos_cb=None, message_cb=None):
+    def __init__(self, uri, sample_cb=None, eos_cb=None, message_cb=None, appsink_source='video/x-raw,format=RGB',
+                                                                            appsink_dict={
+                                                                            'max-buffers': 2,
+                                                                            'drop': 1,
+                                                                            'sync': 1,
+                                                                            'qos': 1}):
         super(GstPlayer, self).__init__()
         self.uri = uri
         self.sample_cb = sample_cb
         self.eos_cb = eos_cb
         self.message_cb = message_cb
+        self.appsink_source = appsink_source
+        self.appsink_dict = appsink_dict
         _instances.append(ref(self, _on_player_deleted))
 
         # ensure gstreamer is init
@@ -242,12 +250,17 @@ cdef class GstPlayer:
             if self.appsink == NULL:
                 raise GstPlayerException('Unable to create an appsink')
 
-            g_object_set_caps(self.appsink, 'video/x-raw,format=RGB')
+            # Init appsink components from dict
+            g_object_set_caps(self.appsink, self.appsink_source)
+            for key in self.appsink_dict.keys():
+                g_object_set_int(self.appsink, key, self.appsink_dict[key])
+
+#            g_object_set_caps(self.appsink, 'video/x-raw,format=RGB')
 #            g_object_set_int(self.appsink, 'max-buffers', 5)
-            g_object_set_int(self.appsink, 'drop', 1)
-            g_object_set_int(self.appsink, 'sync', 1)
-            g_object_set_int(self.appsink, 'qos', 1)
-            g_object_set_int(self.appsink, 'max-buffers', 2)
+#            g_object_set_int(self.appsink, 'drop', 1)
+#            g_object_set_int(self.appsink, 'sync', 1)
+#            g_object_set_int(self.appsink, 'qos', 1)
+#            g_object_set_int(self.appsink, 'max-buffers', 2)
 
             g_object_set_void(self.playbin, 'video-sink', self.appsink)
 
