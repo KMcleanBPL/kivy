@@ -56,6 +56,13 @@ def _on_gstplayer_message(mtype, message):
 class VideoGstplayer(VideoBase):
 
     def __init__(self, **kwargs):
+        self.options = {}
+        if "appsink_source" in kwargs:
+            self.options["appsink_source"] = kwargs["appsink_source"]
+            del kwargs["appsink_source"]
+        if "appsink_dict" in kwargs:
+            self.options["appsink_dict"] = kwargs["appsink_dict"]
+            del kwargs["appsink_dict"]
         self.player = None
         self._buffer = None
         self._buffer_lock = Lock()
@@ -70,7 +77,7 @@ class VideoGstplayer(VideoBase):
         wk_self = ref(self)
         self.player_callback = partial(_on_gstplayer_buffer, wk_self)
         self.player = GstPlayer(uri, self.player_callback,
-                                self._on_gst_eos_sync, _on_gstplayer_message)
+                                self._on_gst_eos_sync, _on_gstplayer_message, **self.options)
         self.player.load()
 
     def unload(self):
