@@ -257,10 +257,10 @@ cdef class GstPlayer:
 
             # Defaults
             default_appsink_dict = {'max-buffers': 5, 'drop': 1, 'sync': 1,'qos': 1}
-            for key in self.default_appsink_dict.keys():
+            for key in default_appsink_dict.keys():
                 if key not in self.appsink_dict:
                     print('GstPlayer.load():', 'Using default', key)
-                    g_object_set_int(self.appsink, key, self.default_appsink_dict[key])
+                    g_object_set_int(self.appsink, key, default_appsink_dict[key])
 
 #            g_object_set_caps(self.appsink, 'video/x-raw,format=RGB')
 #            g_object_set_int(self.appsink, 'max-buffers', 5)
