@@ -191,7 +191,7 @@ cdef class GstPlayer:
 
     def __init__(self, uri, sample_cb=None, eos_cb=None, message_cb=None, appsink_source='video/x-raw,format=RGB',
                                                                             appsink_dict={
-                                                                            'max-buffers': 2,
+                                                                            'max-buffers': 5,
                                                                             'drop': 1,
                                                                             'sync': 1,
                                                                             'qos': 1}):
@@ -202,7 +202,6 @@ cdef class GstPlayer:
         self.message_cb = message_cb
         self.appsink_source = appsink_source
         self.appsink_dict = appsink_dict
-        print('GstPlayer.__init__():', 'appsink_source, appsink_dict:', self.appsink_source, self.appsink_dict)
         _instances.append(ref(self, _on_player_deleted))
 
         # ensure gstreamer is init
@@ -252,10 +251,16 @@ cdef class GstPlayer:
                 raise GstPlayerException('Unable to create an appsink')
 
             # Init appsink components from dict
-            print('GstPlayer.load():', 'appsink_source, appsink_dict:', self.appsink_source, self.appsink_dict)
             g_object_set_caps(self.appsink, self.appsink_source)
             for key in self.appsink_dict.keys():
                 g_object_set_int(self.appsink, key, self.appsink_dict[key])
+
+            # Defaults
+            default_appsink_dict = {'max-buffers': 5, 'drop': 1, 'sync': 1,'qos': 1}
+            for key in self.default_appsink_dict.keys():
+                if key not in self.appsink_dict:
+                    print('GstPlayer.load():', 'Using default', key)
+                    g_object_set_int(self.appsink, key, self.default_appsink_dict[key])
 
 #            g_object_set_caps(self.appsink, 'video/x-raw,format=RGB')
 #            g_object_set_int(self.appsink, 'max-buffers', 5)
