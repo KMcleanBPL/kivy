@@ -138,6 +138,10 @@ class Video(Image):
             self.options["eos"] = kwargs["eos"]
         if "appsink_source" in kwargs:
             self.options["appsink_source"] = kwargs["appsink_source"]
+            del kwargs["appsink_source"]
+        if "appsink_dict" in kwargs:
+            self.options["appsink_dict"] = kwargs["appsink_dict"]
+            del kwargs["appsink_dict"]
         if self.source:
             self._trigger_video_load()
 
