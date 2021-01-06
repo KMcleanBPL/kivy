@@ -202,6 +202,7 @@ cdef class GstPlayer:
         self.message_cb = message_cb
         self.appsink_source = appsink_source
         self.appsink_dict = appsink_dict
+        print('GstPlayer.__init__():', 'appsink_source, appsink_dict:', self.appsink_source, self.appsink_dict)
         _instances.append(ref(self, _on_player_deleted))
 
         # ensure gstreamer is init
@@ -251,6 +252,7 @@ cdef class GstPlayer:
                 raise GstPlayerException('Unable to create an appsink')
 
             # Init appsink components from dict
+            print('GstPlayer.load():', 'appsink_source, appsink_dict:', self.appsink_source, self.appsink_dict)
             g_object_set_caps(self.appsink, self.appsink_source)
             for key in self.appsink_dict.keys():
                 g_object_set_int(self.appsink, key, self.appsink_dict[key])
