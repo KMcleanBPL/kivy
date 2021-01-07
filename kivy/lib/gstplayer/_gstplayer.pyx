@@ -191,7 +191,7 @@ cdef class GstPlayer:
 
     def __init__(self, uri, sample_cb=None, eos_cb=None, message_cb=None, appsink_source='video/x-raw,format=RGB',
                                                                             appsink_dict={
-                                                                            'max-buffers': 5,
+                                                                            'max-buffers': 2,
                                                                             'drop': 1,
                                                                             'sync': 1,
                                                                             'qos': 1}):
@@ -256,7 +256,7 @@ cdef class GstPlayer:
                 g_object_set_int(self.appsink, key, self.appsink_dict[key])
 
             # Defaults
-            default_appsink_dict = {'max-buffers': 5, 'drop': 1, 'sync': 1,'qos': 1}
+            default_appsink_dict = {'max-buffers': 2, 'drop': 1, 'sync': 1,'qos': 1}
             for key in default_appsink_dict.keys():
                 if key not in self.appsink_dict:
                     print('GstPlayer.load():', 'Using default', key)
