@@ -251,6 +251,9 @@ cdef class GstPlayer:
                 raise GstPlayerException('Unable to create an appsink')
 
             # Init appsink components from dict
+            #appsink_source = 'video/x-raw,format=RGB'
+            self.appsink_source = 'video/x-h264,format=RGB'
+            print('kivy/lib/gstplayer/_gstplayer.pyx load():', 'appsink_source:', self.appsink_source)
             g_object_set_caps(self.appsink, self.appsink_source)
             for key in self.appsink_dict.keys():
                 g_object_set_int(self.appsink, key, self.appsink_dict[key])
