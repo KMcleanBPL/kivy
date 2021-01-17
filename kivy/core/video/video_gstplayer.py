@@ -78,11 +78,11 @@ class VideoGstplayer(VideoBase):
         self.player_callback = partial(_on_gstplayer_buffer, wk_self)
         self.player = GstPlayer(uri, self.player_callback,
                                 self._on_gst_eos_sync, _on_gstplayer_message, **self.options)
-        if self.player:
+        if self.player is not None:
             self.player.load()
 
     def unload(self):
-        if self.player:
+        if self.player is not None:
             self.player.unload()
             self.player = None
         with self._buffer_lock:
@@ -90,40 +90,40 @@ class VideoGstplayer(VideoBase):
         self._texture = None
 
     def stop(self):
-        if self.player:
+        if self.player is not None:
             super(VideoGstplayer, self).stop()
             self.player.stop()
 
     def pause(self):
-        if self.player:
+        if self.player is not None:
             super(VideoGstplayer, self).pause()
             self.player.pause()
 
     def play(self):
-        if self.player:
+        if self.player is not None:
             super(VideoGstplayer, self).play()
             self.player.set_volume(self.volume)
             self.player.play()
 
     def seek(self, percent, precise=True):
-        if self.player:
+        if self.player is not None:
             self.player.seek(percent)
 
     def _get_position(self):
         position = None
-        if self.player:
+        if self.player is not None:
             position = self.player.get_position()
         return position
 
     def _get_duration(self):
         duration = None
-        if self.player:
+        if self.player is not None:
             duration = self.player.get_duration()
         return
 
     def _set_volume(self, value):
         self._volume = value
-        if self.player:
+        if self.player is not None:
             self.player.set_volume(self._volume)
 
     def _update(self, dt):

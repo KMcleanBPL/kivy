@@ -221,9 +221,12 @@ class Video(Image):
         video = self._video
         if not video:
             return
-        self.duration = video.duration
-        self.position = video.position
-        self.texture = video.texture
+        if video.duration is not None:
+            self.duration = video.duration
+        if video.position is not None:
+            self.position = video.position
+        if video.texture is not None:
+            self.texture = video.texture
         self.canvas.ask_update()
 
     def _on_eos(self, *largs):
