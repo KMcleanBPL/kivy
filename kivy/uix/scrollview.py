@@ -622,6 +622,8 @@ class ScrollView(StencilView):
             return
 
         if self.effect_x.is_manual:
+            if self._effect_x_start_width is not None:
+                self._effect_x_start_width = self.width
             sw = vp.width - self._effect_x_start_width
         else:
             sw = vp.width - self.width
@@ -637,6 +639,8 @@ class ScrollView(StencilView):
         if not vp or not self.effect_y:
             return
         if self.effect_y.is_manual:
+            if self._effect_y_start_height is not None:
+                self._effect_y_start_height = self.height
             sh = vp.height - self._effect_y_start_height
         else:
             sh = vp.height - self.height
