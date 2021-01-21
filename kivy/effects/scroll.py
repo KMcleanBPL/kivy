@@ -113,12 +113,12 @@ class ScrollEffect(KineticEffect):
         return super(ScrollEffect, self).start(val, t)
 
     def update(self, val, t=None):
-        self.displacement += abs(val - self.history[-1][1])
+        self.displacement += abs(val - (self.history[-1][1] if self.history else 0))
         return super(ScrollEffect, self).update(val, t)
 
     def stop(self, val, t=None):
         self.is_manual = False
-        self.displacement += abs(val - self.history[-1][1])
+        self.displacement += abs(val - (self.history[-1][1] if self.history else 0))
         if self.displacement <= self.drag_threshold:
             self.velocity = 0
             return
